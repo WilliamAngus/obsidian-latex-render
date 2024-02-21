@@ -81,7 +81,7 @@ export default class MyPlugin extends Plugin {
 			// Could have a case where svgCache has the key but the cached file has been deleted
 			if (this.settings.enableCache && this.cache.has(md5Hash) && fs.existsSync(svgPath)) {
 				console.log("Using cached SVG: ", md5Hash);
-				el.innerHTML = fs.readFileSync(svgPath).toString();
+				el.innerHTML = fs.readFileSync(svgPath).toString().replace(/#000|black/g, `currentcolor`).replace(/#fff|white/g, `var(--background-primary)`).replace(/<g/g, `<g style="fill: currentcolor" `);
 				this.addFileToCache(md5Hash, ctx.sourcePath);
 				resolve();
 			}
@@ -90,7 +90,7 @@ export default class MyPlugin extends Plugin {
 
 				this.renderLatexToSVG(source, md5Hash, svgPath).then((v: string) => {
 					if (this.settings.enableCache) this.addFileToCache(md5Hash, ctx.sourcePath);
-					el.innerHTML = v.replace(/#000|black/g, `"currentColor"`).replace(/#fff|white/g, `"var(--background-primary)"`);
+					el.innerHTML = String(v).replace(/#000|black/g, `currentcolor`).replace(/#fff|white/g, `var(--background-primary)`).replace(/<g/g, `<g style="fill: currentcolor" `);
 					resolve();
 				}
 				).catch(err => { el.innerHTML = err; reject(err); });
