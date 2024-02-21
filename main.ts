@@ -90,7 +90,7 @@ export default class MyPlugin extends Plugin {
 
 				this.renderLatexToSVG(source, md5Hash, svgPath).then((v: string) => {
 					if (this.settings.enableCache) this.addFileToCache(md5Hash, ctx.sourcePath);
-					el.innerHTML = v..replaceAll(/("#000"|"black")/g, `"currentColor"`).replaceAll(/("#fff"|"white")/g, `"var(--background-primary)"`);
+					el.innerHTML = v.replaceAll(/("#000"|"black")/g, `"currentColor"`).replaceAll(/("#fff"|"white")/g, `"var(--background-primary)"`);
 					resolve();
 				}
 				).catch(err => { el.innerHTML = err; reject(err); });
